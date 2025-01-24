@@ -307,7 +307,7 @@
 
 
 
-        const excelFileUrl = "https://raw.githubusercontent.com/Legenda1cr/Legendacompany/master/URS_Certifications 18.01.25.xlsx";
+        const excelFileUrl = "https://raw.githubusercontent.com/Legenda1cr/Legendacompany/master/URS_Certifications 23.01.25.xlsx";
 
         // Загрузка данных из Excel
         fetch(excelFileUrl)
@@ -336,6 +336,8 @@
                 console.error('Ошибка при загрузке данных:', error);
                 document.getElementById('search-results').innerHTML = '<p class="error-message">Ошибка при загрузке данных.</p>';
             });
+
+            
 
        // Функция для выполнения поиска по уникальному
         function searchByUniqueId(uniqueId) {
@@ -449,6 +451,23 @@
         }
 
         function createResultItem(item, resultsContainer) {
+            const requiredFields = [
+                item.companyName,
+                item.orgForm,
+                item.inn,
+                item.accreditation,
+                item.certCriteria,
+                item.expirationDate,
+            ];
+
+            // Проверяем, что все поля заполнены
+            const allFieldsFilled = requiredFields.every(field => field && field.trim() !== '' && field !== 'Не указано' && field !== 'Некорректная дата');
+
+            if (!allFieldsFilled) {
+                // Если хотя бы одно поле пустое или некорректное, не выводим сертификат
+                return;
+            }
+
             const div = document.createElement('div');
             div.className = 'result-item';
 
@@ -474,6 +493,8 @@
 
             new QRCode(qrCodeContainer, { text: qrCodeLink, width: 85, height: 85 });
         }
+
+
 
         // Функция для отображения подсказок
         function showSuggestions() {
